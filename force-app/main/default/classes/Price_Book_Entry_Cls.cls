@@ -13,7 +13,6 @@ public with sharing class Price_Book_Entry_Cls {
     }
 
     @AuraEnabled
-
     public static void updateRecord(PricebookEntry pbEntry){
 
         Decimal rollupListPrice = 0; //Represents the Rollup Cost Plus Markup Amount field.

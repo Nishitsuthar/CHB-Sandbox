@@ -27,7 +27,7 @@
                         </div>
                         <div class="field-container">
                             <lightning:outputField class="bottom-line" fieldName="buildertek__Markup__c" />
-                            <lightning:buttonIcon iconName="utility:edit" name="markup" size="small" variant="bare" onclick="{!c.editRecord}" />
+                            <lightning:buttonIcon iconName="utility:edit" size="small" variant="bare" onclick="{!c.editRecord}" />
                         </div>
                         <div class="field-container">
                             <lightning:outputField class="bottom-line" fieldName="Markup_Amount__c" />

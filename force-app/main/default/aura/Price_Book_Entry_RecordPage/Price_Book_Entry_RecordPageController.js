@@ -22,12 +22,12 @@
     saveRecord : function(component, event, helper){
         console.log('Save Record');
         var temp = component.get("v.pbEntry");
+        debugger;
         console.log('check your input s ',{temp});
 
         var action = component.get("c.updateRecord");
         action.setParams({
-            pbEntry : component.get("v.pbEntry"),
-            oldMarkup : oldValueMarkup
+            pbEntry : component.get("v.pbEntry")
         });
         action.setCallback(this, function (response) {
             component.set("v.viewMode", true);
@@ -37,7 +37,7 @@
                 $A.get('e.force:refreshView').fire();
             } else {
                 let temp = response.getError();
-                console.log('temp error '+temp);
+                console.log('temp error ',temp);
                 var toastEvent = $A.get("e.force:showToast");
 				toastEvent.setParams({
 					"type": "Error",
