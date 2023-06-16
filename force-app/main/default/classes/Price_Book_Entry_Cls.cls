@@ -66,15 +66,22 @@ public with sharing class Price_Book_Entry_Cls {
             if(rollupUnitCost !=  pbEntry.Rollup_Costs__c){
                 pbEntry.buildertek__Unit_Cost__c = rollupUnitCost;
             }
+
+            //* logic added by Nishit for CHB-58 if rollupListPrice = 0 then value = 0
+            if((rollupUnitCost !=  pbEntry.Rollup_Costs_Plus_Markup__c)){
+                pbEntry.buildertek__Markup__c =  rollupUnitCost;
+            }
         }
 
-        //* logic added by Nishit for CHB-58
-        if(rollupUnitCost !=  pbEntry.Rollup_Costs__c ||RollupConstPlus != pbEntry.Rollup_Costs_Plus_Markup__c){
-            pbEntry.buildertek__Markup__c =  (((rollupUnitCost - RollupConstPlus ) / rollupUnitCost) * (-1))*100;
-        }
 
         if (rollupListPrice > 0 ) {
 
+            //* logic added by Nishit for CHB-58
+            if((rollupListPrice !=  pbEntry.Rollup_Costs_Plus_Markup__c)){
+                Decimal markUp = (((rollupUnitCost - RollupConstPlus ) / rollupUnitCost) * (-1))*100;
+                Decimal valueSet = markup.setscale(2);
+                pbEntry.buildertek__Markup__c =  valueSet;
+            }
 
             //comment due to CHB 57
             if(rollupUnitCost !=  pbEntry.Rollup_Costs__c){
@@ -82,7 +89,8 @@ public with sharing class Price_Book_Entry_Cls {
             }
 
             if(pbEntry.buildertek__Markup__c != null){
-                markUpAmount = pbEntry.buildertek__Markup__c * rollupListPrice/100;
+                //! commenting this line 16/06 because of conflicting with CHB-58
+                // markUpAmount = pbEntry.buildertek__Markup__c * pbEntry.UnitPrice/100;
             }
             else if(pbEntry.buildertek__Markup__c == null){
                 markUpAmount = 0;
@@ -90,7 +98,7 @@ public with sharing class Price_Book_Entry_Cls {
             else{
                 markUpAmount = rollupListPrice;
             }
-
+            System.debug('UnitPrice in if '+rollupListPrice + markUpAmount);
             pbEntry.UnitPrice = rollupListPrice + markUpAmount;
 
         }else{
@@ -105,6 +113,7 @@ public with sharing class Price_Book_Entry_Cls {
             //pbEntry.buildertek__Unit_Cost__c = rollupUnitCost;
             //pbEntry.buildertek__Unit_Cost__c = pbEntry.Rollup_Costs__c;
             //pbEntry.UnitPrice = pbEntry.Rollup_Costs_Plus_Markup__c;
+            System.debug('UnitPrice in else '+rollupListPrice + markUpAmount);
             pbEntry.UnitPrice = rollupListPrice + markUpAmount;
         }
 
